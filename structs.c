@@ -2,6 +2,7 @@
 #include "ritchie.h"
 #include <stdio.h>
 #include <ctype.h>
+#include <string.h>
 
 /*int isspace(char c){
   return c == ' ' || c == '\n' || c == '\t';
@@ -30,23 +31,17 @@ int getword(char* word, int lim) { //lim = nro maximo chars que puedo tener en e
   while(isspace(c = getch())); //detecta espacios blanco, tabs, saltos linea
 
   if(c != EOF) *w++ = c;
-
+  //elimina constantes cadena y caracter
   if(c == '\"' || c == '\'') {
     int quote = c; //se guarda que tipo de comilla se ingreso
-    w--;
-
     while((c = getch()) != quote && c != EOF) {
       if(c == '\\'){
-        *w++ = c;
         c = getch();
       }
-      if(lim > 1){//para no sobrepasar limite del buffer
-        *w++ = c;
-        lim--;
-      }
     }
-    *w = '\0';
-    return word[0] ? word[0] : quote;
+    word[0] = quote; //deja comilla principio
+    word[1] = 0;
+    return quote; //devuelve comilla
   }
 
   if(c == '#'){//para tratar directivas como include define ifndef o endif :D
@@ -72,5 +67,22 @@ int getword(char* word, int lim) { //lim = nro maximo chars que puedo tener en e
 
   *w = 0;
   return word[0];
+}
 
+int binsearch(char *word, struct key tab[], int n) {
+  int low = 0;
+  int high = n - 1;
+  int mid, cond;
+
+  while (low <= high) {
+    mid = (low + high) / 2;
+    if ((cond = strcmp(word, tab[mid].word)) < 0) {
+      high = mid - 1; 
+    } else if (cond > 0) {
+      low = mid + 1;  
+    } else {
+      return mid; 
+    }
+  }
+  return -1; 
 }

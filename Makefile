@@ -1,14 +1,20 @@
+CC = gcc
+CFLAGS = -Wall -Wextra -g
+
 test: main.o structs.o ritchie.o
-	gcc main.o structs.o ritchie.o -o test
+	$(CC) $(CFLAGS) main.o structs.o ritchie.o -o test
 
 main.o: main.c structs.h
-	gcc -c -g main.c
+	$(CC) $(CFLAGS) -c main.c
 
 structs.o: structs.c structs.h ritchie.h
-	gcc -c -g structs.c
+	$(CC) $(CFLAGS) -c structs.c
 
 ritchie.o: ritchie.c ritchie.h
-	gcc -c -g ritchie.c
+	$(CC) $(CFLAGS) -c ritchie.c
+
+run: test
+	./test < main.c
 
 clean:
 	rm -f *.o test

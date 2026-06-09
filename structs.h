@@ -1,8 +1,13 @@
 #ifndef STRUCTS_H
 #define STRUCTS_H
-int getword(char*, int);
+
+struct key {
+  char *word;
+  int count;
+};
+
+int getword(char *word, int lim);
+int binsearch(char *word, struct key tab[], int n);
+
 #endif
-
-
-
 
