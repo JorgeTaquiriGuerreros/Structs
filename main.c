@@ -3,8 +3,10 @@
 #include <stdio.h>
 /* #define PROMPT "structs> " */
 #include <ctype.h>
+#include <string.h>
+#include <stdlib.h>
 #define MAXWORD 100
-#define NKEYS (sizeof(keytab) / sizeof(keytab[0]))
+/*#define NKEYS (sizeof(keytab) / sizeof(keytab[0]))*/
 /*
 int main(){
 
@@ -15,6 +17,7 @@ int main(){
   return 0;
 }
 */
+/*
 struct key keytab[] = {
   {"auto", 0}, {"break", 0}, {"case", 0}, {"char", 0},
   {"const", 0}, {"continue", 0}, {"default", 0}, {"do", 0},
@@ -42,6 +45,28 @@ int main() {
     if (keytab[i].count > 0) {
       printf("%4d %s\n", keytab[i].count, keytab[i].word);
     }
+  }
+
+  return 0;
+}
+*/
+struct wordCount words[MAXWORDS]; 
+int nWords = 0;                   
+
+int main() {
+  char word[MAXWORD];
+
+  while (getword(word, MAXWORD) != EOF) {
+    if (isalpha(word[0]) || word[0] == '_') { //solo palabras o variables
+      addWord(words, &nWords, word);
+    }
+  }
+
+  //ordena por frecuencia
+  qsort(words, nWords, sizeof(struct wordCount), compareCounts);
+
+  for (int i = 0; i < nWords; i++) {
+    printf("%4d %s\n", words[i].count, words[i].word);
   }
 
   return 0;

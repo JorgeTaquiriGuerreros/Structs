@@ -81,8 +81,38 @@ int binsearch(char *word, struct key tab[], int n) {
     } else if (cond > 0) {
       low = mid + 1;  
     } else {
-      return mid; 
+      return mid;//se encontro coincidencia+1
     }
   }
-  return -1; 
+  return -1;//no hay wordd 
+}
+
+//ejercicio 6-4
+
+int findWord(struct wordCount words[], int nWords, const char *word) {
+  for (int i = 0; i < nWords; i++) {
+    if (strcmp(words[i].word, word) == 0) {
+      return i; //palabra encontrada
+    }
+  }
+  return -1;
+}
+
+void addWord(struct wordCount words[], int *nWords, const char *word) {
+  int idx = findWord(words, *nWords, word);
+  if (idx >= 0) {
+    words[idx].count++;//si existe +1
+  } else {
+    if (*nWords < MAXWORDS) {
+      strcpy(words[*nWords].word, word);
+      words[*nWords].count = 1;
+      (*nWords)++;//se agrego la nueva word
+    }
+  }
+}
+
+int compareCounts(const void *a, const void *b) {
+  struct wordCount *wa = (struct wordCount *)a;
+  struct wordCount *wb = (struct wordCount *)b;
+  return wb->count - wa->count; //orden decreciente
 }
